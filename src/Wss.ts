@@ -5,9 +5,11 @@ export class Wss extends WebSocketServer {
 		super({ port: port });
 
 		console.log(`WSS: Running on port ${port}`);
+
+		this.start();
 	}
 
-	start() {
+	private start() {
 		this.on("connection", (ws) => {
 			console.log(`WSS: ${this.clients.size} clients`);
 
