@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Roboto:wght@500;900&display=swap"
+			rel="stylesheet"
+		/>
+
+		<style>
+			@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@500;900&display=swap");
+			body {
+				font-family: "Roboto", sans-serif;
+				font-size: 1.5rem;
+			}
+
+			table {
+				table-layout: fixed;
+				width: 100%;
+				background: rgba(0, 0, 0, 0.5);
+				position: absolute;
+				bottom: 0;
+			}
+
+			td {
+				vertical-align: top;
+				color: white;
+				padding: 5px;
+				-ms-word-break: break-all;
+				word-break: break-all;
+				word-break: break-word;
+				-webkit-hyphens: auto;
+				-moz-hyphens: auto;
+				-ms-hyphens: auto;
+				hyphens: auto;
+				opacity: 0;
+				-webkit-transition: opacity 1s;
+				-moz-transition: opacity 1s;
+				transition: opacity 1s;
+			}
+
+			td.fade {
+				opacity: 1;
+			}
+			.user {
+				text-align: right;
+				font-weight: bold;
+				color: white;
+				/*white-space:nowrap;*/
+			}
+
+			/*.user > span {
+				display: inline;
+				white-space: nowrap;
+			}*/
+
+			.message {
+				text-align: left;
+
+				/*display: block;*/
+			}
+
+			img {
+				vertical-align: middle;
+				height: 1.5rem;
+				/*display:inline;*/
+			}
+		</style>
+	</head>
+	<body>
+		<table id="chatbox">
+			<tr>
+				<td class="user">
+					<img src="imgs/tiktok_2.png" />
+					<img src="imgs/ytmod.png" />
+					<span> salasan1 </span>
+				</td>
+				<td class="message">
+					<span> aika npc </span>
+				</td>
+			</tr>
+		</table>
+
+		<script>
+			function connect() {
+				var ws = new WebSocket("ws://localhost:8080");
+				ws.addEventListener("open", () => {
+					console.log("ws: Ready");
+				});
+
+				ws.addEventListener("close", () => {
+					var tableRef = document.getElementById("chatbox");
+					var newRow = tableRef.insertRow();
+					var user = newRow.insertCell(0);
+					var message = newRow.insertCell(1);
+
+					user.className = "user";
+					message.className = "message";
+
+					user.innerHTML = `<span> WSS </span`;
+					message.innerHTML = "Yhteys katkesi! Yritetaan yhdistaa uudelleen";
+
+					user.style.color = "red";
+					message.style.color = "red";
+
+					// Scroll
+					window.scrollTo({
+						top: document.body.scrollHeight,
+						behavior: "smooth",
+					});
+
+					user.classList.toggle("fade");
+					message.classList.toggle("fade");
+
+					setTimeout(function () {
+						connect();
+					}, 1000);
+				});
+
+				ws.addEventListener("message", function (event) {
+					var res = JSON.parse(event.data);
+
+					var tableRef = document.getElementById("chatbox");
+					var newRow = tableRef.insertRow();
+					var user = newRow.insertCell(0);
+					var message = newRow.insertCell(1);
+
+					user.className = "user";
+					message.className = "message";
+
+					// Badges
+					var badge = "";
+					// <img src=${res.other.badges[0]} />
+					if (res.other && res.other.badges && res.other.badges.length > 0) {
+						badge = `<img src="${res.other.badges.join('" /> <img src="')}" />`;
+					}
+					// XSS escaped in backend
+					user.innerHTML = `<img src="imgs/${res.platform}_2.png" /> ${badge} <span> ${res.user}</span>`;
+					message.innerHTML = res.message;
+
+					// User color
+					if (res.other.color) user.style.color = res.other.color;
+
+					// Scroll
+					window.scrollTo({
+						top: document.body.scrollHeight,
+						behavior: "smooth",
+					});
+
+					user.classList.toggle("fade");
+					message.classList.toggle("fade");
+
+					// Poistetaan vanhat viestit ettei RAM lopu :D
+					while (tableRef.rows.length > 50) tableRef.rows[0].remove();
+				});
+			}
+			connect();
+		</script>
+	</body>
+</html>
