@@ -12,6 +12,14 @@ export class Wss extends WebSocketServer {
 	private start() {
 		this.on("connection", (ws) => {
 			console.log(`WSS: ${this.clients.size} clients`);
+			ws.send(
+				JSON.stringify({
+					platform: "wss",
+					user: "WSS",
+					message: "Connected!",
+					other: {},
+				})
+			);
 
 			ws.on("message", (data) => {
 				console.log(`WSS: Client has sent us: ${data}`);

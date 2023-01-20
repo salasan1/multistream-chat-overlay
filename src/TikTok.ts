@@ -12,39 +12,54 @@ export class TikTok extends WebcastPushConnection {
 	}
 
 	private async start() {
-		const con = this.connect().then((state) => {
-			console.info(`TT: Connected to roomId ${state.roomId}`);
-			this.wss.send(
-				"tiktok",
-				Functions.EscapeXSS("TikTok"),
-				Functions.EscapeXSS(`Connected to roomId ${state.roomId}`),
-				{ color: "green" }
-			);
-
-			this.on("chat", (data: TikTokChat) => {
-				if (!data.comment) return;
-				const other = { badges: [] };
-
-				// BADGE
-				// TT: Something missing from badge{"badgeSceneType":2,"type":"pm_mt_live_ng_im","name":"New gifter"}
-				if (data.userBadges.length > 0) {
-					data.userBadges.forEach((e) => {
-						if (e.type === "pm_mt_moderator_im")
-							return other.badges.push("imgs/tiktokmod.png");
-						if (e.type === "image") return other.badges.push(e.url + "#");
-
-						console.log("TT: Something missing from badge" + JSON.stringify(e));
-					});
-				}
-				// data.uniqueId
+		const con = this.connect()
+			.then((state) => {
+				console.info(`TT: Connected to roomId ${state.roomId}`);
 				this.wss.send(
 					"tiktok",
-					Functions.EscapeXSS(data.nickname),
-					Functions.EscapeXSS(data.comment),
-					other
+					Functions.EscapeXSS("TikTok"),
+					Functions.EscapeXSS(`Connected to roomId ${state.roomId}`),
+					{ color: "green" }
 				);
+
+				this.on("chat", (data: TikTokChat) => {
+					if (!data.comment) return;
+					const other = { badges: [] };
+
+					// BADGE
+					// TT: Something missing from badge{"badgeSceneType":2,"type":"pm_mt_live_ng_im","name":"New gifter"}
+					if (data.userBadges.length > 0) {
+						data.userBadges.forEach((e) => {
+							if (e.type === "pm_mt_moderator_im")
+								return other.badges.push("imgs/tiktokmod.png");
+							if (e.type === "image") return other.badges.push(e.url + "#");
+
+							console.log(
+								"TT: Something missing from badge" + JSON.stringify(e)
+							);
+						});
+					}
+					// data.uniqueId
+					this.wss.send(
+						"tiktok",
+						Functions.EscapeXSS(data.nickname),
+						Functions.EscapeXSS(data.comment),
+						other
+					);
+				});
+			})
+			.catch((e) => {
+				console.log(e);
+			})
+			.finally(async () => {
+				console.log("TT: Trying to reconnect in 30s");
+				await this.wait(30000);
+				await this.start();
 			});
-		});
+	}
+
+	private wait(milliseconds: number) {
+		return new Promise((resolve) => setTimeout(resolve, milliseconds));
 	}
 }
 
