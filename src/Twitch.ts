@@ -28,7 +28,7 @@ export class Twitch extends ChatClient {
 			};
 
 			// Ignore chat bot
-			if (user === "StreamElements") return;
+			if (user === "streamelements") return;
 
 			// Jos väriä ei ole, arvotaan sellainen
 			if (!other.color) other.color = this.color(user);
