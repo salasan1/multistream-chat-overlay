@@ -3,10 +3,10 @@
       "target": "ES2021",
       "module": "commonjs",
       "typeRoots": ["./node_modules/@types"],
-      "outDir": "dist",
       "esModuleInterop": true,
-      "forceConsistentCasingInFileNames": true
+      "forceConsistentCasingInFileNames": true,
+      "outDir": "dist"
     },
-    "include": ["src/**/*"],
+    "include": ["src", "environment.d.ts"],
     "exclude": ["node_modules"]
   }
