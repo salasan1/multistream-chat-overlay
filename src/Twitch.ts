@@ -12,15 +12,13 @@ export class Twitch extends ChatClient {
 	}
 	private async start(channel: string) {
 		await this.connect();
-		this.onConnect(() => {
-			console.log("Twitch: Ready");
-			this.wss.send(
-				"twitch",
-				Functions.EscapeXSS("Twitch"),
-				Functions.EscapeXSS(`Connected to channel ${channel}`),
-				{}
-			);
-		});
+		console.log("Tw: Ready");
+		this.wss.send(
+			"twitch",
+			Functions.EscapeXSS("Twitch"),
+			Functions.EscapeXSS(`Connected to channel ${channel}`),
+			{}
+		);
 
 		this.onMessage((channel, user, text, tpm: any) => {
 			const other: any = {

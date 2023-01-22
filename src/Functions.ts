@@ -8,4 +8,8 @@ export class Functions {
 			.replaceAll('"', "&quot;")
 			.replaceAll("'", "&#039;");
 	}
+
+	static wait(milliseconds: number) {
+		return new Promise((resolve) => setTimeout(resolve, milliseconds));
+	}
 }

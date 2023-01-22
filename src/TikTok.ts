@@ -52,13 +52,9 @@ export class TikTok extends WebcastPushConnection {
 				console.log(e);
 
 				console.log("TT: Trying to reconnect in 30s");
-				await this.wait(30000);
+				await Functions.wait(30000);
 				await this.start();
 			});
-	}
-
-	private wait(milliseconds: number) {
-		return new Promise((resolve) => setTimeout(resolve, milliseconds));
 	}
 }
 
