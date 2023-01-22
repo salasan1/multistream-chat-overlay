@@ -3,6 +3,7 @@ declare global {
 		interface ProcessEnv {
 			tiktok: string;
 			twitch: string;
+			youtube: string;
 		}
 	}
 }
