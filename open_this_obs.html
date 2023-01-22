@@ -18,7 +18,11 @@
 			table {
 				table-layout: fixed;
 				width: 100%;
-				background: rgba(0, 0, 0, 0.5);
+				background: rgba(0, 0, 0, 0);
+				/*text-shadow: 0 0 1rem black, 0 0 0.5rem black;*/
+				text-shadow: -1px -1px 0.2rem #000, 1px -1px 0.2rem #000,
+					-1px 1px 0.2rem #000, 1px 1px 0.2rem #000, 0 0 1rem black,
+					0 0 0.5rem black;
 				position: absolute;
 				bottom: 0;
 			}
@@ -64,6 +68,8 @@
 			img {
 				vertical-align: middle;
 				height: 1.5rem;
+				-webkit-filter: drop-shadow(0 0 0.2rem #000);
+				filter: drop-shadow(0 0 0.2rem #000);
 				/*display:inline;*/
 			}
 		</style>
@@ -98,7 +104,7 @@
 					user.className = "user";
 					message.className = "message";
 
-					user.innerHTML = `<span> WSS </span`;
+					user.innerHTML = `<img src="./imgs/wss_2.png" /> <span> WSS </span`;
 					message.innerHTML = "Connection lost! Trying to reconnect in 5s";
 
 					user.style.color = "red";
