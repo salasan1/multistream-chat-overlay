@@ -48,10 +48,9 @@ export class TikTok extends WebcastPushConnection {
 					);
 				});
 			})
-			.catch((e) => {
+			.catch(async (e) => {
 				console.log(e);
-			})
-			.finally(async () => {
+
 				console.log("TT: Trying to reconnect in 30s");
 				await this.wait(30000);
 				await this.start();

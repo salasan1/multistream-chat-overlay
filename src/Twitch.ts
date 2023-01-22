@@ -8,16 +8,16 @@ export class Twitch extends ChatClient {
 		super({ channels: [username] });
 		this.wss = wss;
 
-		this.start();
+		this.start(username);
 	}
-	private async start() {
+	private async start(channel: string) {
 		await this.connect();
 		this.onConnect(() => {
 			console.log("Twitch: Ready");
 			this.wss.send(
 				"twitch",
 				Functions.EscapeXSS("Twitch"),
-				Functions.EscapeXSS(`connected to channel`),
+				Functions.EscapeXSS(`Connected to channel ${channel}`),
 				{}
 			);
 		});
@@ -50,6 +50,7 @@ export class Twitch extends ChatClient {
 	private color(user: string) {
 		// Värit ovat oikein. Tarkistettu 20.1.2023
 		// Koodi 2014 tammikuu https://discuss.dev.twitch.tv/t/default-user-color-in-chat/385
+		// Twitch käyttää nykyään jotaki randomizeria joten värejä ei voi saada samaksi
 		let default_colors = [
 			["Red", "#FF0000"],
 			["Blue", "#0000FF"],
@@ -68,7 +69,7 @@ export class Twitch extends ChatClient {
 			["SpringGreen", "#00FF7F"],
 		];
 
-		var color;
+		var color: string;
 
 		var n = user.charCodeAt(0) + user.charCodeAt(user.length - 1);
 		color = default_colors[n % default_colors.length][1];
