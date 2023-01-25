@@ -14,6 +14,7 @@
 	"license": "ISC",
 	"dependencies": {
 		"@twurple/chat": "^5.3.3",
+		"axios": "^1.2.4",
 		"dotenv": "^16.0.3",
 		"tiktok-live-connector": "^1.0.2",
 		"ws": "^8.12.0",
