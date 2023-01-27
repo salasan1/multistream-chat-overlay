@@ -13,5 +13,6 @@ This project combines chats on several streaming services into one that can be a
 ## How to setup?
 1. Install [Node.js LTS](https://nodejs.dev/en/download/)
 2. Download & extract this repo
-3. Run start.bat
-4. Open `open_this_obs.html` in browser or OBS
+3. Edit `.env` with text editor
+4. Run start.bat
+5. Open `open_this_obs.html` in browser or OBS
