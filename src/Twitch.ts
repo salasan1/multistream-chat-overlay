@@ -23,11 +23,21 @@ export class Twitch extends ChatClient {
 			Functions.EscapeXSS(`Connected to channel ${channel}`),
 			{}
 		);
+		this.onMessageRemove(async (channel, messageId, msg) => {
+			this.wss.deleteMsgs(msg.params.channel.toLowerCase());
+		});
+
+		this.onTimeout(async (channel, user, reason, duration) => {
+			this.wss.deleteMsgs(user.toLowerCase());
+		});
 
 		this.onMessage(async (channel, user, text, tpm: any) => {
 			// Ignore chat bots
 			let ignorelist = ["streamelements", "nightbot", "fossabot", "moobot"];
 			if (ignorelist.some((v) => user === v)) return;
+
+			// Ignore commands
+			if (text.startsWith("!")) return;
 
 			// Badges & Color
 			const other = {

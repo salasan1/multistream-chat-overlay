@@ -134,6 +134,26 @@
 					user.className = "user";
 					message.className = "message";
 
+					// Delete message if it's deleted (needs "little bit" of refactoring)
+					if (res.type === "delete") {
+						var i = 0;
+						while (tableRef.rows[i]) {
+							let userNameRow = tableRef.rows[i].cells[0].innerText
+								.trim()
+								.toLowerCase();
+
+							if (userNameRow == res.user) {
+								// Delete row
+								tableRef.deleteRow(i);
+								// Go back one row to check if there's more
+								i--;
+							}
+							i++;
+						}
+						// Stop going further
+						return;
+					}
+
 					// Badges
 					var badge = "";
 					// <img src=${res.other.badges[0]} />

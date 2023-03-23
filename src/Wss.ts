@@ -45,10 +45,38 @@ export class Wss extends WebSocketServer {
 		this.clients.forEach((client) => {
 			client.send(
 				JSON.stringify({
+					type: "message",
 					platform: platform,
 					user: user,
 					message: message,
 					other: other,
+				})
+			);
+		});
+	}
+
+	public deleteMsgs(user: string) {
+		// If there are no clients connected, don't send anything
+		if (!this.clients || this.clients.size === 0) return;
+
+		this.clients.forEach((client) => {
+			client.send(
+				JSON.stringify({
+					type: "delete",
+					user: user,
+				})
+			);
+		});
+	}
+
+	public clearChat() {
+		// If there are no clients connected, don't send anything
+		if (!this.clients || this.clients.size === 0) return;
+
+		this.clients.forEach((client) => {
+			client.send(
+				JSON.stringify({
+					type: "clearall",
 				})
 			);
 		});
