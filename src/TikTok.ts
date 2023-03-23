@@ -47,6 +47,12 @@ export class TikTok extends WebcastPushConnection {
 						other
 					);
 				});
+
+				this.on("streamEnd", async (data) => {
+					console.log("TT: Stream ended. Trying to reconnect in 30s");
+					await Functions.wait(30000);
+					await this.start();
+				});
 			})
 			.catch(async (e) => {
 				console.log(e);

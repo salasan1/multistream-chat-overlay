@@ -35,7 +35,7 @@ export class Wss extends WebSocketServer {
 		});
 	}
 
-	send(platform: string, user: string, message: string, other: object) {
+	public send(platform: string, user: string, message: string, other: object) {
 		// If there are no clients connected, don't send anything
 		if (!this.clients || this.clients.size === 0) return;
 
