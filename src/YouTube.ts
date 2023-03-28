@@ -27,7 +27,7 @@ export class YouTube extends LiveChat {
 					chatItem.message.forEach((e: any) => {
 						if (e.emojiText) msg += e.emojiText;
 						else if (e.text) msg += e.text;
-						else console.log("Jotaki puuttuu", e);
+						else console.log("YT: Something is missing", e);
 					});
 
 					let other = {

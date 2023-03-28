@@ -33,7 +33,12 @@ export class Twitch extends ChatClient {
 
 		this.onMessage(async (channel, user, text, tpm: any) => {
 			// Ignore chat bots
-			let ignorelist = ["streamelements", "nightbot", "fossabot", "moobot"];
+			let ignorelist = [
+				"streamelements",
+				"nightbot",
+				"fossabot",
+				"moobot",
+			];
 			if (ignorelist.some((v) => user === v)) return;
 
 			// Ignore commands
@@ -45,7 +50,7 @@ export class Twitch extends ChatClient {
 				badges: await this.getBadgeIcons(tpm.tags.get("badges")),
 			};
 
-			// Jos väriä ei ole, arvotaan sellainen
+			// If there is no color, pick one
 			if (!other.color) other.color = this.pickColor(user);
 
 			// Badges
@@ -61,9 +66,9 @@ export class Twitch extends ChatClient {
 	}
 
 	private pickColor(user: string) {
-		// Värit ovat oikein. Tarkistettu 20.1.2023
-		// Koodi 2014 tammikuu https://discuss.dev.twitch.tv/t/default-user-color-in-chat/385
-		// Twitch käyttää nykyään jotaki randomizeria joten värejä ei voi saada samaksi
+		// Colors are correct. Checked 20.1.2023
+		// 2014 Jan https://discuss.dev.twitch.tv/t/default-user-color-in-chat/385
+		// Twitch uses some randomizer so colors can't be the same for every client
 		let default_colors = [
 			["Red", "#FF0000"],
 			["Blue", "#0000FF"],
@@ -105,17 +110,21 @@ export class Twitch extends ChatClient {
 		// If no badges return
 		if (!badges) return [];
 
+		// Split badges
 		let arr = badges.split(",");
 		let data = await this.loadIcons();
 		let badgearr = [];
 
 		arr.forEach(async (e) => {
+			// Split the badge name and version
 			let res = e.split("/");
 
 			try {
-				badgearr.push(data.badge_sets[res[0]].versions[res[1]].image_url_4x);
+				badgearr.push(
+					data.badge_sets[res[0]].versions[res[1]].image_url_4x
+				);
 			} catch (error) {
-				console.log(`Tw: Joku badge kusi`, e);
+				console.log(`Tw: Some badge failed`, e);
 				console.log(error);
 			}
 		});

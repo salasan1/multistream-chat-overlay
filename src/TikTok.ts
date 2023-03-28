@@ -27,15 +27,17 @@ export class TikTok extends WebcastPushConnection {
 					const other = { badges: [] };
 
 					// BADGE
-					// TT: Something missing from badge{"badgeSceneType":2,"type":"pm_mt_live_ng_im","name":"New gifter"}
+					// Example response if missing: TT: Something missing from badge{"badgeSceneType":2,"type":"pm_mt_live_ng_im","name":"New gifter"}
 					if (data.userBadges.length > 0) {
 						data.userBadges.forEach((e) => {
 							if (e.type === "pm_mt_moderator_im")
 								return other.badges.push("imgs/tiktokmod.png");
-							if (e.type === "image") return other.badges.push(e.url + "#");
+							if (e.type === "image")
+								return other.badges.push(e.url + "#");
 
 							console.log(
-								"TT: Something missing from badge" + JSON.stringify(e)
+								"TT: Something missing from badge" +
+									JSON.stringify(e)
 							);
 						});
 					}

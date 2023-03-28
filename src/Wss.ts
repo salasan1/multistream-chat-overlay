@@ -3,7 +3,6 @@ import { WebSocketServer } from "ws";
 export class Wss extends WebSocketServer {
 	constructor(port: number) {
 		super({ port: port });
-
 		console.log(`WSS: Running on port ${port}`);
 
 		this.start();
@@ -35,7 +34,12 @@ export class Wss extends WebSocketServer {
 		});
 	}
 
-	public send(platform: string, user: string, message: string, other: object) {
+	public send(
+		platform: string,
+		user: string,
+		message: string,
+		other: object
+	) {
 		// If there are no clients connected, don't send anything
 		if (!this.clients || this.clients.size === 0) return;
 
