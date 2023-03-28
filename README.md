@@ -6,7 +6,9 @@ This project combines chats on several streaming services into one that can be a
 > This project got inspiration from [social_stream](https://github.com/steveseguin/social_stream#readme), but for my needs social_stream wasn't good enough.
 
 ### Currently supported platforms
-* Twitch (with all chat badges)
+* Twitch
+  * All chat badges
+  * Removes messages from overlay if user gets timeouted on Twitch
 * TikTok (with all chat badges)
 * YouTube (might have some bugs)
 
