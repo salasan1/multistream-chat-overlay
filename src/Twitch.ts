@@ -1,7 +1,8 @@
 import { Wss } from "./Wss";
 import { ChatClient, ChatUser } from "@twurple/chat";
 import { Functions } from "./Functions";
-import axios from "axios";
+//import axios from "axios";
+import { readFileSync } from "fs";
 
 export class Twitch extends ChatClient {
 	private wss: Wss;
@@ -33,12 +34,7 @@ export class Twitch extends ChatClient {
 
 		this.onMessage(async (channel, user, text, tpm: any) => {
 			// Ignore chat bots
-			let ignorelist = [
-				"streamelements",
-				"nightbot",
-				"fossabot",
-				"moobot",
-			];
+			let ignorelist = ["streamelements", "nightbot", "fossabot", "moobot"];
 			if (ignorelist.some((v) => user === v)) return;
 
 			// Ignore commands
@@ -97,12 +93,14 @@ export class Twitch extends ChatClient {
 
 	private async loadIcons() {
 		if (this.badges) return this.badges;
-		const data = await axios.get(
+		// TODO: Load badges from twitch api instead of file
+		/*const data = await axios.get(
 			"https://badges.twitch.tv/v1/badges/global/display"
-		);
-		this.badges = data.data;
-		console.log("Tw: Badges loaded from endpoint");
-		return data.data;
+		);*/
+
+		this.badges = JSON.parse(readFileSync("./badges.json", "utf8"));
+		console.log("Tw: Badges loaded from file (temporary fix)");
+		return this.badges;
 	}
 
 	// Example badges 'moderator/1,founder/0,glhf-pledge/1',
@@ -120,9 +118,7 @@ export class Twitch extends ChatClient {
 			let res = e.split("/");
 
 			try {
-				badgearr.push(
-					data.badge_sets[res[0]].versions[res[1]].image_url_4x
-				);
+				badgearr.push(data.badge_sets[res[0]].versions[res[1]].image_url_4x);
 			} catch (error) {
 				console.log(`Tw: Some badge failed`, e);
 				console.log(error);
